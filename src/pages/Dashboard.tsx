@@ -203,14 +203,14 @@ const Dashboard = () => {
                   <Button asChild variant="secondary">
                     <Link to="/manage-trainees">Manage Trainees</Link>
                   </Button>
-                  <Button asChild variant="secondary">
-                    <Link to="/forms/usee-uact">U-See U-Act Form</Link>
-                  </Button>
                   <Button asChild variant="outline">
                     <Link to="/requests-complaints">Requests & Complaints</Link>
                   </Button>
                   <Button asChild variant="outline">
                     <Link to="/training-reports">Training Reports</Link>
+                  </Button>
+                  <Button asChild variant="secondary">
+                    <Link to="/forms/usee-uact">U-See U-Act Form</Link>
                   </Button>
                 </div>
                 {pendingRequests > 0 && (
@@ -240,14 +240,14 @@ const Dashboard = () => {
                   <Button asChild variant="secondary">
                     <Link to="/generate-passcodes">Generate Passcodes</Link>
                   </Button>
-                  <Button asChild variant="secondary">
-                    <Link to="/forms/usee-uact">U-See U-Act Form</Link>
-                  </Button>
                   <Button asChild variant="outline">
                     <Link to="/all-records">All Training Records</Link>
                   </Button>
                   <Button asChild variant="outline">
                     <Link to="/requests-complaints">Handle Complaints</Link>
+                  </Button>
+                  <Button asChild variant="secondary">
+                    <Link to="/forms/usee-uact">U-See U-Act Form</Link>
                   </Button>
                 </div>
               </CardContent>
@@ -270,11 +270,11 @@ const Dashboard = () => {
                   <Button asChild variant="secondary">
                     <Link to="/size-forms">Submit Size Forms</Link>
                   </Button>
-                  <Button asChild variant="secondary">
-                    <Link to="/forms/usee-uact">U-See U-Act Form</Link>
-                  </Button>
                   <Button asChild variant="outline">
                     <Link to="/equipment-requests">Equipment Requests</Link>
+                  </Button>
+                  <Button asChild variant="secondary">
+                    <Link to="/forms/usee-uact">U-See U-Act Form</Link>
                   </Button>
                 </div>
               </CardContent>
@@ -282,6 +282,32 @@ const Dashboard = () => {
           </div>
         );
 
+      case "Utility Office":
+        return (
+          <div className="grid gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Utility Office Dashboard</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Button asChild variant="hero">
+                    <Link to="/size-data">View Size Data</Link>
+                  </Button>
+                  <Button asChild variant="secondary">
+                    <Link to="/equipment-inventory">Equipment Inventory</Link>
+                  </Button>
+                  <Button asChild variant="outline">
+                    <Link to="/requests-complaints">Send Requests</Link>
+                  </Button>
+                  <Button asChild variant="secondary">
+                    <Link to="/forms/usee-uact">U-See U-Act Form</Link>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        );
       case "Nurse":
         return (
           <div className="grid gap-6">
@@ -294,14 +320,14 @@ const Dashboard = () => {
                   <Button asChild variant="hero">
                     <Link to="/medical-records">Medical Records</Link>
                   </Button>
-                  <Button asChild variant="secondary">
-                    <Link to="/forms/usee-uact">U-See U-Act Form</Link>
-                  </Button>
                   <Button asChild variant="outline">
                     <Link to="/health-reports">Health Reports</Link>
                   </Button>
                   <Button asChild variant="outline">
                     <Link to="/requests-complaints">Send Requests</Link>
+                  </Button>
+                  <Button asChild variant="secondary">
+                    <Link to="/forms/usee-uact">U-See U-Act Form</Link>
                   </Button>
                 </div>
               </CardContent>
@@ -330,6 +356,9 @@ const Dashboard = () => {
                   <Button asChild variant="outline">
                     <Link to="/safety-complaints">Safety Complaints</Link>
                   </Button>
+                  <Button asChild variant="secondary">
+                    <Link to="/forms/usee-uact">U-See U-Act Form</Link>
+                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -357,6 +386,9 @@ const Dashboard = () => {
                   <Button asChild variant="outline">
                     <Link to="/escalate-to-coo">Escalate to COO</Link>
                   </Button>
+                  <Button asChild variant="secondary">
+                    <Link to="/forms/usee-uact">U-See U-Act Form</Link>
+                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -380,6 +412,9 @@ const Dashboard = () => {
                       </Button>
                       <Button asChild variant="secondary">
                         <Link to="/high-level-requests">High-Level Requests</Link>
+                      </Button>
+                      <Button asChild variant="secondary">
+                        <Link to="/forms/usee-uact">U-See U-Act Form</Link>
                       </Button>
                     </div>
                   </div>
@@ -406,11 +441,11 @@ const Dashboard = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Button asChild variant="hero">
-                    <Link to="/forms/usee-uact">U-See U-Act Form</Link>
-                  </Button>
                   <Button asChild variant="secondary">
                     <Link to="/requests-complaints">Send Requests/Complaints</Link>
+                  </Button>
+                  <Button asChild variant="hero">
+                    <Link to="/forms/usee-uact">U-See U-Act Form</Link>
                   </Button>
                 </div>
               </CardContent>

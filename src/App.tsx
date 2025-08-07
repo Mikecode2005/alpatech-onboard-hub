@@ -13,6 +13,9 @@ import YouSeeUActForm from "./pages/forms/YouSeeUActForm";
 import BOSIETForm from "./pages/forms/BOSIETForm";
 import FireWatchForm from "./pages/forms/FireWatchForm";
 import CSERForm from "./pages/forms/CSERForm";
+import SizeForm from "./pages/forms/SizeForm";
+import RequestsComplaints from "./pages/RequestsComplaints";
+import Login from "./pages/Login";
 
 const queryClient = new QueryClient();
 
@@ -26,9 +29,12 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/onboarding" element={<Onboarding />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/forms/usee-uact" element={<YouSeeUActForm />} />
+            <Route path="/size-forms" element={<SizeForm />} />
+            <Route path="/requests-complaints" element={<RequestsComplaints />} />
             <Route path="/forms/bosiet" element={<BOSIETForm />} />
             <Route path="/forms/fire-watch" element={<FireWatchForm />} />
             <Route path="/forms/cseand-r" element={<CSERForm />} />

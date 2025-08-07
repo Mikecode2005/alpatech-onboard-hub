@@ -184,6 +184,8 @@ export interface AppState {
   submitSizeForm: (d: SizeForm) => void;
   submitRequestComplaint: (d: Omit<RequestComplaint, 'id' | 'createdAt'>) => void;
   updateRequestComplaintStatus: (id: string, status: RequestComplaint['status']) => void;
+  assignTrainingModules: (traineeEmail: string, modules: string[]) => void;
+  getTraineeAssignments: (traineeEmail: string) => string[];
   reset: () => void;
 }
 
@@ -294,6 +296,17 @@ export const useAppState = create<AppState>((set, get) => ({
     const next = { ...get(), requestsComplaints: list } as Partial<AppState>;
     persist(next);
     set({ requestsComplaints: list });
+  },
+  
+  assignTrainingModules: (traineeEmail, modules) => {
+    // This would typically be stored per trainee, but for simplicity we'll use a global assignment
+    const next = { ...get(), assignedTrainings: modules } as Partial<AppState>;
+    persist(next);
+    set({ assignedTrainings: modules });
+  },
+  
+  getTraineeAssignments: (traineeEmail) => {
+    return get().assignedTrainings || [];
   },
   
   reset: () => {
