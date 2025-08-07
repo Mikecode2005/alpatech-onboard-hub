@@ -11,7 +11,7 @@ const Index = () => {
     return () => clearTimeout(t);
   }, []);
 
-  if (loading) return <BrandLoader label="Alpatech" />;
+  if (loading) return <BrandLoader label="alpatech" />;
 
   return (
     <div className="min-h-screen bg-hero">
