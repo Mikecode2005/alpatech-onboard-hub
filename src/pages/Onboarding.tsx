@@ -174,13 +174,28 @@ const Onboarding = () => {
           <CardContent className="space-y-6">
             {step === 0 && (
               <div className="space-y-6">
-                <div className="bg-accent/10 p-6 rounded-lg border">
+                <div className="bg-accent/10 p-6 rounded-lg border relative">
+                  <div className="absolute top-2 right-2 text-xs text-muted-foreground opacity-50 rotate-12">
+                    AENL NO GIFT POLICY (THIRD PARTY COMPLIANCE)
+                  </div>
                   <h3 className="font-semibold mb-4">AENL NO GIFT POLICY (THIRD PARTY COMPLIANCE)</h3>
                   <div className="text-sm space-y-3 text-muted-foreground">
-                    <p>Please be informed that AENL advocates the value of integrity and trustworthiness in all our business activities. AENL would like to announce that it strictly adheres to a NO GIFT policy.</p>
-                    <p>The No Gift Policy is adopted by AENL to prevent or appreciate conflicts of interest that may compromise the every position of the company. AENL will not give on any special medication? Yes ( ) No ( ). If yes, please specify.</p>
-                    <p>This policy is meant to clear, state that no trainee or delegate attending training at Alpatech Training Centre is permitted to give any form of gift to Alpatech personnel or training instructor providing the purpose and/or intent behind such gift.</p>
-                    <p>Alpatech is committed to treat the violation of this policy with the seriousness it deserves up to reporting the violations to appropriate government agencies and various or assist us in serving you better by also adhering to this policy.</p>
+                    <p>Please be informed that AENL advocates the value of integrity and trustworthiness in all our business activities. AENL would like to announce that it strictly adheres to a <strong>NO GIFT POLICY</strong>.</p>
+                    
+                    <p>The No Gift Policy is adopted by AENL to prevent or appreciate conflicts of interest that may compromise the integrity and position of the company. AENL will not give or receive any form of gift to Alpatech personnel or training instructor providing the training, regardless of the purpose and/or intent behind such gift.</p>
+                    
+                    <p>This policy is meant to clearly state that no trainee or delegate attending training at Alpatech Training Centre is permitted to give any form of gift to Alpatech personnel or training instructor. This includes but is not limited to:</p>
+                    <ul className="list-disc list-inside ml-4 space-y-1">
+                      <li>Cash or monetary gifts</li>
+                      <li>Physical items or products</li>
+                      <li>Services or favors</li>
+                      <li>Entertainment or hospitality</li>
+                      <li>Any other form of consideration</li>
+                    </ul>
+                    
+                    <p>Alpatech is committed to treat the violation of this policy with the seriousness it deserves, up to and including reporting the violations to appropriate government agencies. We appreciate your cooperation in helping us maintain the highest standards of integrity and professionalism.</p>
+                    
+                    <p className="font-medium">By signing below, you acknowledge that you have read, understood, and agree to comply with this NO GIFT POLICY throughout your training period and any future interactions with Alpatech personnel.</p>
                   </div>
                 </div>
                 
