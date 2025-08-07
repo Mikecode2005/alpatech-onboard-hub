@@ -10,6 +10,9 @@ import Login from "./pages/Login";
 import Onboarding from "./pages/Onboarding";
 import Dashboard from "./pages/Dashboard";
 import YouSeeUActForm from "./pages/forms/YouSeeUActForm";
+import BOSIETForm from "./pages/forms/BOSIETForm";
+import FireWatchForm from "./pages/forms/FireWatchForm";
+import CSERForm from "./pages/forms/CSERForm";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +29,9 @@ const App = () => (
             <Route path="/onboarding" element={<Onboarding />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/forms/usee-uact" element={<YouSeeUActForm />} />
+            <Route path="/forms/bosiet" element={<BOSIETForm />} />
+            <Route path="/forms/fire-watch" element={<FireWatchForm />} />
+            <Route path="/forms/cseand-r" element={<CSERForm />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
