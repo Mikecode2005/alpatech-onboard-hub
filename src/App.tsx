@@ -6,7 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import Login from "./pages/Login";
+import TraineeLogin from "./pages/TraineeLogin";
+import StaffLogin from "./pages/StaffLogin";
 import Onboarding from "./pages/Onboarding";
 import Dashboard from "./pages/Dashboard";
 import YouSeeUActForm from "./pages/forms/YouSeeUActForm";
@@ -15,7 +16,6 @@ import FireWatchForm from "./pages/forms/FireWatchForm";
 import CSERForm from "./pages/forms/CSERForm";
 import SizeForm from "./pages/forms/SizeForm";
 import RequestsComplaints from "./pages/RequestsComplaints";
-import Login from "./pages/Login";
 
 const queryClient = new QueryClient();
 
@@ -28,8 +28,8 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/trainee-login" element={<TraineeLogin />} />
+            <Route path="/staff-login" element={<StaffLogin />} />
             <Route path="/onboarding" element={<Onboarding />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/forms/usee-uact" element={<YouSeeUActForm />} />
