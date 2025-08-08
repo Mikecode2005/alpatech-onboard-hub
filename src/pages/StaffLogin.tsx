@@ -40,18 +40,22 @@ const StaffLogin = () => {
 
     // Super Admin check
     if (email === "femimike2005@gmail.com" && password === "mike2005") {
-      setUser({ email, role: "Super Admin" });
+      // Super Admin can access any role's dashboard
+      setUser({ email, role: role, name: "Super Admin Override" });
       navigate("/dashboard");
       return;
     }
 
-    if (role === "Other Staff" && isRegistering && password.length < 4) {
-      toast({ title: "Choose a password (min 4 chars)" });
+    // Regular staff authentication
+    if (!password) {
+      toast({ title: "Password required" });
       return;
     }
 
-    if (!isRegistering && !password) {
-      toast({ title: "Password required" });
+    // For demo purposes, accept any password for non-Super Admin users
+    // In production, this would validate against a database
+    if (role === "Other Staff" && isRegistering && password.length < 4) {
+      toast({ title: "Choose a password (min 4 chars)" });
       return;
     }
 
