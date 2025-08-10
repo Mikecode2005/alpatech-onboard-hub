@@ -16,6 +16,19 @@ import FireWatchForm from "./pages/forms/FireWatchForm";
 import CSERForm from "./pages/forms/CSERForm";
 import SizeForm from "./pages/forms/SizeForm";
 import RequestsComplaints from "./pages/RequestsComplaints";
+import HighLevelRequests from "./pages/management/HighLevelRequests";
+import ExecutiveDashboard from "./pages/management/ExecutiveDashboard";
+import AssignTraining from "./pages/management/AssignTraining";
+import ManageTrainees from "./pages/management/ManageTrainees";
+import TrainingReports from "./pages/management/TrainingReports";
+import ManageUsers from "./pages/management/ManageUsers";
+import GeneratePasscodes from "./pages/management/GeneratePasscodes";
+import AllRecords from "./pages/management/AllRecords";
+import EquipmentRequests from "./pages/management/EquipmentRequests";
+import SizeData from "./pages/management/SizeData";
+import EquipmentInventory from "./pages/management/EquipmentInventory";
+import MedicalRecords from "./pages/management/MedicalRecords";
+import PlaceholderPage from "./pages/placeholder/PlaceholderPage";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +51,28 @@ const App = () => (
             <Route path="/forms/bosiet" element={<BOSIETForm />} />
             <Route path="/forms/fire-watch" element={<FireWatchForm />} />
             <Route path="/forms/cseand-r" element={<CSERForm />} />
+            <Route path="/high-level-requests" element={<HighLevelRequests />} />
+            <Route path="/executive-dashboard" element={<ExecutiveDashboard />} />
+            <Route path="/assign-training" element={<AssignTraining />} />
+            <Route path="/manage-trainees" element={<ManageTrainees />} />
+            <Route path="/training-reports" element={<TrainingReports />} />
+            <Route path="/manage-users" element={<ManageUsers />} />
+            <Route path="/generate-passcodes" element={<GeneratePasscodes />} />
+            <Route path="/all-records" element={<AllRecords />} />
+            <Route path="/assigned-trainees" element={<PlaceholderPage title="Assigned Trainees" description="View trainees assigned to you" />} />
+            <Route path="/equipment-requests" element={<EquipmentRequests />} />
+            <Route path="/size-data" element={<SizeData />} />
+            <Route path="/equipment-inventory" element={<EquipmentInventory />} />
+            <Route path="/medical-records" element={<MedicalRecords />} />
+            <Route path="/health-reports" element={<PlaceholderPage title="Health Reports" description="Generate and view health reports" />} />
+            <Route path="/safety-reports" element={<PlaceholderPage title="Safety Reports" description="Manage safety reports and incidents" />} />
+            <Route path="/usee-uact-data" element={<PlaceholderPage title="U-See U-Act Data" description="Review U-See U-Act form submissions" />} />
+            <Route path="/create-safety-forms" element={<PlaceholderPage title="Create Safety Forms" description="Create custom safety forms" />} />
+            <Route path="/safety-complaints" element={<PlaceholderPage title="Safety Complaints" description="Handle safety-related complaints" />} />
+            <Route path="/training-statistics" element={<PlaceholderPage title="Training Statistics" description="View comprehensive training statistics" />} />
+            <Route path="/medical-reports-overview" element={<PlaceholderPage title="Medical Reports Overview" description="Overview of all medical reports" />} />
+            <Route path="/user-activity" element={<PlaceholderPage title="User Activity" description="Monitor user activity across the platform" />} />
+            <Route path="/escalate-to-coo" element={<PlaceholderPage title="Escalate to COO" description="Escalate important matters to the Chief Operations Officer" />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
