@@ -12,14 +12,18 @@ const Onboarding = () => {
   const [step, setStep] = useState(1);
 
   const steps = [
-    { title: "Welcome", description: "Welcome to Alpatech Training Portal" },
-    { title: "Medical Forms", description: "Complete medical screening forms" },
-    { title: "Safety Training", description: "Review safety protocols" },
-    { title: "Completion", description: "Onboarding complete" }
+    { title: "Welcome", description: "Welcome to Alpatech Training Portal", route: null },
+    { title: "No Gift Policy", description: "Acknowledge AENL No Gift Policy", route: "/forms/welcome-policy" },
+    { title: "Course Registration", description: "Complete course registration form", route: "/forms/course-registration" },
+    { title: "Medical Screening", description: "Complete medical screening forms", route: "/forms/medical-screening" },
+    { title: "Completion", description: "Onboarding complete", route: null }
   ];
 
   const handleNext = () => {
-    if (step < steps.length) {
+    const currentStep = steps[step - 1];
+    if (currentStep?.route) {
+      navigate(currentStep.route);
+    } else if (step < steps.length) {
       setStep(step + 1);
     } else {
       navigate("/dashboard");
@@ -62,23 +66,26 @@ const Onboarding = () => {
               
               {step === 2 && (
                 <div className="space-y-4">
-                  <p>Please complete the required medical screening forms.</p>
-                  <Button variant="outline" onClick={() => navigate("/forms/medical")}>
-                    Start Medical Forms
-                  </Button>
+                  <p>Please read and acknowledge the AENL No Gift Policy before proceeding with your training.</p>
+                  <p className="text-sm text-muted-foreground">This policy ensures integrity and professionalism in all training activities.</p>
                 </div>
               )}
               
               {step === 3 && (
                 <div className="space-y-4">
-                  <p>Review safety protocols and complete safety training modules.</p>
-                  <Button variant="outline" onClick={() => navigate("/forms/safety")}>
-                    Start Safety Training
-                  </Button>
+                  <p>Complete your course registration with personal and company details.</p>
+                  <p className="text-sm text-muted-foreground">This information helps us prepare appropriate training materials.</p>
                 </div>
               )}
               
               {step === 4 && (
+                <div className="space-y-4">
+                  <p>Complete the medical screening form for safety assessment.</p>
+                  <p className="text-sm text-muted-foreground">This will be reviewed by our medical team before training approval.</p>
+                </div>
+              )}
+              
+              {step === 5 && (
                 <div className="space-y-4">
                   <p>Congratulations! You have completed the onboarding process.</p>
                   <p>You can now access your dashboard and training materials.</p>

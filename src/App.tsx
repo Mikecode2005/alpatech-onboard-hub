@@ -11,6 +11,9 @@ import StaffLogin from "./pages/StaffLogin";
 import Onboarding from "./pages/Onboarding";
 import Dashboard from "./pages/Dashboard";
 import YouSeeUActForm from "./pages/forms/YouSeeUActForm";
+import WelcomePolicyForm from "./pages/forms/WelcomePolicyForm";
+import CourseRegistrationForm from "./pages/forms/CourseRegistrationForm";
+import MedicalScreeningForm from "./pages/forms/MedicalScreeningForm";
 import BOSIETForm from "./pages/forms/BOSIETForm";
 import FireWatchForm from "./pages/forms/FireWatchForm";
 import CSERForm from "./pages/forms/CSERForm";
@@ -28,6 +31,7 @@ import EquipmentRequests from "./pages/management/EquipmentRequests";
 import SizeData from "./pages/management/SizeData";
 import EquipmentInventory from "./pages/management/EquipmentInventory";
 import MedicalRecords from "./pages/management/MedicalRecords";
+import NurseDashboard from "./pages/management/NurseDashboard";
 import PlaceholderPage from "./pages/placeholder/PlaceholderPage";
 
 const queryClient = new QueryClient();
@@ -46,6 +50,9 @@ const App = () => (
             <Route path="/onboarding" element={<Onboarding />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/forms/usee-uact" element={<YouSeeUActForm />} />
+            <Route path="/forms/welcome-policy" element={<WelcomePolicyForm />} />
+            <Route path="/forms/course-registration" element={<CourseRegistrationForm />} />
+            <Route path="/forms/medical-screening" element={<MedicalScreeningForm />} />
             <Route path="/size-forms" element={<SizeForm />} />
             <Route path="/requests-complaints" element={<RequestsComplaints />} />
             <Route path="/forms/bosiet" element={<BOSIETForm />} />
@@ -64,6 +71,7 @@ const App = () => (
             <Route path="/size-data" element={<SizeData />} />
             <Route path="/equipment-inventory" element={<EquipmentInventory />} />
             <Route path="/medical-records" element={<MedicalRecords />} />
+            <Route path="/nurse-dashboard" element={<NurseDashboard />} />
             <Route path="/health-reports" element={<PlaceholderPage title="Health Reports" description="Generate and view health reports" />} />
             <Route path="/safety-reports" element={<PlaceholderPage title="Safety Reports" description="Manage safety reports and incidents" />} />
             <Route path="/usee-uact-data" element={<PlaceholderPage title="U-See U-Act Data" description="Review U-See U-Act form submissions" />} />

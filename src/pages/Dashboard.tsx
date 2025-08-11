@@ -195,31 +195,56 @@ const Dashboard = () => {
               <CardHeader>
                 <CardTitle>Training Supervisor Dashboard</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <Button asChild variant="hero">
-                    <Link to="/assign-training">Assign Training Modules</Link>
+                  <Button asChild variant="hero" size="lg">
+                    <Link to="/assign-training">Assign Training</Link>
                   </Button>
-                  <Button asChild variant="secondary">
+                  <Button asChild variant="secondary" size="lg">
                     <Link to="/manage-trainees">Manage Trainees</Link>
                   </Button>
-                  <Button asChild variant="outline">
-                    <Link to="/requests-complaints">Requests & Complaints</Link>
-                  </Button>
-                  <Button asChild variant="outline">
+                  <Button asChild variant="outline" size="lg">
                     <Link to="/training-reports">Training Reports</Link>
                   </Button>
-                  <Button asChild variant="secondary">
+                  <Button asChild variant="secondary" size="lg">
+                    <Link to="/medical-approvals">Medical Approvals</Link>
+                  </Button>
+                  <Button asChild variant="outline" size="lg">
+                    <Link to="/requests-complaints">Requests & Complaints</Link>
+                  </Button>
+                  <Button asChild variant="outline" size="lg">
                     <Link to="/forms/usee-uact">U-See U-Act Form</Link>
                   </Button>
                 </div>
+                
                 {pendingRequests > 0 && (
-                  <div className="bg-yellow-50 border border-yellow-200 rounded p-4">
-                    <p className="text-yellow-800">
-                      You have {pendingRequests} pending request(s)/complaint(s) to review.
-                    </p>
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
+                      <p className="text-yellow-800 font-medium">
+                        You have {pendingRequests} pending request(s)/complaint(s) to review.
+                      </p>
+                    </div>
                   </div>
                 )}
+                
+                <div className="bg-accent/10 p-4 rounded-lg border">
+                  <h3 className="font-semibold mb-2">Training Overview</h3>
+                  <div className="grid grid-cols-3 gap-4 text-center">
+                    <div>
+                      <div className="text-2xl font-bold text-primary">12</div>
+                      <div className="text-sm text-muted-foreground">Active Trainees</div>
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold text-secondary">3</div>
+                      <div className="text-sm text-muted-foreground">Training Modules</div>
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold text-accent">85%</div>
+                      <div className="text-sm text-muted-foreground">Completion Rate</div>
+                    </div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -232,23 +257,44 @@ const Dashboard = () => {
               <CardHeader>
                 <CardTitle>Training Coordinator Dashboard</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <Button asChild variant="hero">
-                    <Link to="/manage-users">Manage User Accounts</Link>
-                  </Button>
-                  <Button asChild variant="secondary">
+                  <Button asChild variant="hero" size="lg">
                     <Link to="/generate-passcodes">Generate Passcodes</Link>
                   </Button>
-                  <Button asChild variant="outline">
-                    <Link to="/all-records">All Training Records</Link>
+                  <Button asChild variant="secondary" size="lg">
+                    <Link to="/manage-users">Manage User Accounts</Link>
                   </Button>
-                  <Button asChild variant="outline">
+                  <Button asChild variant="outline" size="lg">
+                    <Link to="/all-records">Training Records</Link>
+                  </Button>
+                  <Button asChild variant="outline" size="lg">
+                    <Link to="/training-assignments">Training Assignments</Link>
+                  </Button>
+                  <Button asChild variant="secondary" size="lg">
                     <Link to="/requests-complaints">Handle Complaints</Link>
                   </Button>
-                  <Button asChild variant="secondary">
+                  <Button asChild variant="outline" size="lg">
                     <Link to="/forms/usee-uact">U-See U-Act Form</Link>
                   </Button>
+                </div>
+                
+                <div className="bg-accent/10 p-4 rounded-lg border">
+                  <h3 className="font-semibold mb-2">Quick Stats</h3>
+                  <div className="grid grid-cols-3 gap-4 text-center">
+                    <div>
+                      <div className="text-2xl font-bold text-primary">24</div>
+                      <div className="text-sm text-muted-foreground">Active Passcodes</div>
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold text-secondary">156</div>
+                      <div className="text-sm text-muted-foreground">Total Users</div>
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold text-accent">8</div>
+                      <div className="text-sm text-muted-foreground">Pending Reviews</div>
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -315,20 +361,38 @@ const Dashboard = () => {
               <CardHeader>
                 <CardTitle>Nurse Dashboard</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <Button asChild variant="hero">
-                    <Link to="/medical-records">Medical Records</Link>
+              <CardContent className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Button asChild variant="hero" size="lg">
+                    <Link to="/nurse-dashboard">Medical Records Review</Link>
                   </Button>
-                  <Button asChild variant="outline">
+                  <Button asChild variant="secondary" size="lg">
                     <Link to="/health-reports">Health Reports</Link>
                   </Button>
-                  <Button asChild variant="outline">
+                  <Button asChild variant="outline" size="lg">
                     <Link to="/requests-complaints">Send Requests</Link>
                   </Button>
-                  <Button asChild variant="secondary">
+                  <Button asChild variant="outline" size="lg">
                     <Link to="/forms/usee-uact">U-See U-Act Form</Link>
                   </Button>
+                </div>
+                
+                <div className="bg-accent/10 p-4 rounded-lg border">
+                  <h3 className="font-semibold mb-2">Medical Review Status</h3>
+                  <div className="grid grid-cols-3 gap-4 text-center">
+                    <div>
+                      <div className="text-2xl font-bold text-yellow-600">5</div>
+                      <div className="text-sm text-muted-foreground">Pending Review</div>
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold text-green-600">18</div>
+                      <div className="text-sm text-muted-foreground">Approved</div>
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold text-red-600">2</div>
+                      <div className="text-sm text-muted-foreground">Flagged</div>
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
