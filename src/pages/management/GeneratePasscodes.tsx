@@ -16,6 +16,7 @@ interface Passcode {
   role: string;
   is_used: boolean;
   used_by?: string;
+  trainee_email?: string;
   created_at: string;
   expires_at: string;
   used_at?: string;
@@ -24,21 +25,9 @@ interface Passcode {
 const GeneratePasscodes = () => {
   const { toast } = useToast();
   const [passcodes, setPasscodes] = useState<Passcode[]>([]);
-  const [selectedRole, setSelectedRole] = useState("");
+  const [traineeEmail, setTraineeEmail] = useState("");
   const [expiryDays, setExpiryDays] = useState(30);
-  const [batchSize, setBatchSize] = useState(1);
   const [loading, setLoading] = useState(false);
-
-  const roles = [
-    "Trainee",
-    "Training Supervisor", 
-    "Instructor / Team Lead",
-    "Utility Office",
-    "Nurse",
-    "Safety Coordinator",
-    "Operations Manager",
-    "Other Staff"
-  ];
 
   useEffect(() => {
     fetchPasscodes();
@@ -68,9 +57,14 @@ const GeneratePasscodes = () => {
     return result;
   };
 
-  const createPasscodes = async () => {
-    if (!selectedRole) {
-      toast({ title: "Please select a role", variant: "destructive" });
+  const createPasscode = async () => {
+    if (!traineeEmail) {
+      toast({ title: "Please enter trainee email", variant: "destructive" });
+      return;
+    }
+
+    if (passcodes.some(p => p.used_by === traineeEmail && !p.is_used)) {
+      toast({ title: "Active passcode already exists for this email", variant: "destructive" });
       return;
     }
 
@@ -79,28 +73,30 @@ const GeneratePasscodes = () => {
       const expiresAt = new Date();
       expiresAt.setDate(expiresAt.getDate() + expiryDays);
 
-      const newPasscodes = Array.from({ length: batchSize }, () => ({
+      const newPasscode = {
         code: generatePasscode(),
-        role: selectedRole,
+        role: "Trainee",
+        trainee_email: traineeEmail,
         expires_at: expiresAt.toISOString(),
         created_by: "00000000-0000-0000-0000-000000000000" // Placeholder UUID, will be replaced with actual auth in real system
-      }));
+      };
 
       const { error } = await supabase
         .from('passcodes')
-        .insert(newPasscodes);
+        .insert([newPasscode]);
 
       if (error) throw error;
 
       toast({ 
-        title: "Passcodes generated successfully!",
-        description: `Generated ${batchSize} passcode(s) for ${selectedRole}`
+        title: "Passcode generated successfully!",
+        description: `Generated passcode for ${traineeEmail}`
       });
       
+      setTraineeEmail("");
       fetchPasscodes();
     } catch (error) {
-      console.error('Error creating passcodes:', error);
-      toast({ title: "Error generating passcodes", variant: "destructive" });
+      console.error('Error creating passcode:', error);
+      toast({ title: "Error generating passcode", variant: "destructive" });
     } finally {
       setLoading(false);
     }
@@ -150,22 +146,18 @@ const GeneratePasscodes = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Key className="h-5 w-5" />
-                Generate New Passcodes
+                Generate Trainee Passcode
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label>User Role</Label>
-                <Select value={selectedRole} onValueChange={setSelectedRole}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select role" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {roles.map(role => (
-                      <SelectItem key={role} value={role}>{role}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Label>Trainee Email</Label>
+                <Input
+                  type="email"
+                  placeholder="trainee@company.com"
+                  value={traineeEmail}
+                  onChange={(e) => setTraineeEmail(e.target.value)}
+                />
               </div>
 
               <div>
@@ -179,24 +171,13 @@ const GeneratePasscodes = () => {
                 />
               </div>
 
-              <div>
-                <Label>Batch Size</Label>
-                <Input
-                  type="number"
-                  value={batchSize}
-                  onChange={(e) => setBatchSize(parseInt(e.target.value) || 1)}
-                  min="1"
-                  max="50"
-                />
-              </div>
-
               <Button 
-                onClick={createPasscodes} 
-                disabled={loading || !selectedRole}
+                onClick={createPasscode} 
+                disabled={loading || !traineeEmail}
                 className="w-full"
                 variant="hero"
               >
-                {loading ? "Generating..." : "Generate Passcodes"}
+                {loading ? "Generating..." : "Generate Passcode"}
               </Button>
             </CardContent>
           </Card>
@@ -267,7 +248,7 @@ const GeneratePasscodes = () => {
                     <th className="text-left p-3">Status</th>
                     <th className="text-left p-3">Created</th>
                     <th className="text-left p-3">Expires</th>
-                    <th className="text-left p-3">Used By</th>
+                    <th className="text-left p-3">Trainee Email</th>
                     <th className="text-left p-3">Actions</th>
                   </tr>
                 </thead>
@@ -283,16 +264,9 @@ const GeneratePasscodes = () => {
                       <td className="p-3 text-sm text-muted-foreground">
                         {new Date(passcode.expires_at).toLocaleDateString()}
                       </td>
-                      <td className="p-3 text-sm">
-                        {passcode.used_by ? (
-                          <div className="flex items-center gap-1">
-                            <User className="h-3 w-3" />
-                            {passcode.used_by}
-                          </div>
-                        ) : (
-                          "-"
-                        )}
-                      </td>
+                       <td className="p-3 text-sm">
+                         {passcode.trainee_email || "-"}
+                       </td>
                       <td className="p-3">
                         <Button
                           size="sm"
