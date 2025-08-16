@@ -22,6 +22,10 @@ import RequestsComplaints from "./pages/RequestsComplaints";
 import HighLevelRequests from "./pages/management/HighLevelRequests";
 import ExecutiveDashboard from "./pages/management/ExecutiveDashboard";
 import AssignTraining from "./pages/management/AssignTraining";
+import TrainingCoordinatorDashboard from "./pages/management/TrainingCoordinatorDashboard";
+import TrainingSupervisorDashboard from "./pages/management/TrainingSupervisorDashboard";
+import SafetyCoordinatorDashboard from "./pages/management/SafetyCoordinatorDashboard";
+import NurseDashboard from "./pages/management/NurseDashboard";
 import ManageTrainees from "./pages/management/ManageTrainees";
 import TrainingReports from "./pages/management/TrainingReports";
 import ManageUsers from "./pages/management/ManageUsers";
@@ -31,7 +35,6 @@ import EquipmentRequests from "./pages/management/EquipmentRequests";
 import SizeData from "./pages/management/SizeData";
 import EquipmentInventory from "./pages/management/EquipmentInventory";
 import MedicalRecords from "./pages/management/MedicalRecords";
-import NurseDashboard from "./pages/management/NurseDashboard";
 import PlaceholderPage from "./pages/placeholder/PlaceholderPage";
 
 const queryClient = new QueryClient();
@@ -61,6 +64,19 @@ const App = () => (
             <Route path="/high-level-requests" element={<HighLevelRequests />} />
             <Route path="/executive-dashboard" element={<ExecutiveDashboard />} />
             <Route path="/assign-training" element={<AssignTraining />} />
+            <Route path="/management/training-coordinator" element={<TrainingCoordinatorDashboard />} />
+            <Route path="/management/training-supervisor" element={<TrainingSupervisorDashboard />} />
+            <Route path="/management/safety-coordinator" element={<SafetyCoordinatorDashboard />} />
+            <Route path="/management/nurse-dashboard" element={<NurseDashboard />} />
+            <Route path="/management/assign-training" element={<AssignTraining />} />
+            <Route path="/management/generate-passcodes" element={<GeneratePasscodes />} />
+            <Route path="/management/manage-users" element={<ManageUsers />} />
+            <Route path="/management/manage-trainees" element={<ManageTrainees />} />
+            <Route path="/management/training-reports" element={<TrainingReports />} />
+            <Route path="/management/all-records" element={<AllRecords />} />
+            <Route path="/management/medical-records" element={<MedicalRecords />} />
+            <Route path="/management/high-level-requests" element={<HighLevelRequests />} />
+            <Route path="/management/equipment-requests" element={<EquipmentRequests />} />
             <Route path="/manage-trainees" element={<ManageTrainees />} />
             <Route path="/training-reports" element={<TrainingReports />} />
             <Route path="/manage-users" element={<ManageUsers />} />

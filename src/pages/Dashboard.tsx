@@ -190,61 +190,16 @@ const Dashboard = () => {
 
       case "Training Supervisor":
         return (
-          <div className="grid gap-6">
+          <div className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Training Supervisor Dashboard</CardTitle>
+                <CardTitle>Training Supervision Portal</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <Button asChild variant="hero" size="lg">
-                    <Link to="/assign-training">Assign Training</Link>
-                  </Button>
-                  <Button asChild variant="secondary" size="lg">
-                    <Link to="/manage-trainees">Manage Trainees</Link>
-                  </Button>
-                  <Button asChild variant="outline" size="lg">
-                    <Link to="/training-reports">Training Reports</Link>
-                  </Button>
-                  <Button asChild variant="secondary" size="lg">
-                    <Link to="/medical-approvals">Medical Approvals</Link>
-                  </Button>
-                  <Button asChild variant="outline" size="lg">
-                    <Link to="/requests-complaints">Requests & Complaints</Link>
-                  </Button>
-                  <Button asChild variant="outline" size="lg">
-                    <Link to="/forms/usee-uact">U-See U-Act Form</Link>
-                  </Button>
-                </div>
-                
-                {pendingRequests > 0 && (
-                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
-                      <p className="text-yellow-800 font-medium">
-                        You have {pendingRequests} pending request(s)/complaint(s) to review.
-                      </p>
-                    </div>
-                  </div>
-                )}
-                
-                <div className="bg-accent/10 p-4 rounded-lg border">
-                  <h3 className="font-semibold mb-2">Training Overview</h3>
-                  <div className="grid grid-cols-3 gap-4 text-center">
-                    <div>
-                      <div className="text-2xl font-bold text-primary">12</div>
-                      <div className="text-sm text-muted-foreground">Active Trainees</div>
-                    </div>
-                    <div>
-                      <div className="text-2xl font-bold text-secondary">3</div>
-                      <div className="text-sm text-muted-foreground">Training Modules</div>
-                    </div>
-                    <div>
-                      <div className="text-2xl font-bold text-accent">85%</div>
-                      <div className="text-sm text-muted-foreground">Completion Rate</div>
-                    </div>
-                  </div>
-                </div>
+              <CardContent>
+                <p className="text-muted-foreground mb-4">Access your dedicated supervisor dashboard with full training oversight capabilities</p>
+                <Button onClick={() => navigate("/management/training-supervisor")} className="w-full">
+                  Open Training Supervisor Dashboard
+                </Button>
               </CardContent>
             </Card>
           </div>
@@ -252,50 +207,16 @@ const Dashboard = () => {
 
       case "Training Coordinator":
         return (
-          <div className="grid gap-6">
+          <div className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Training Coordinator Dashboard</CardTitle>
+                <CardTitle>Training Coordination Portal</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <Button asChild variant="hero" size="lg">
-                    <Link to="/generate-passcodes">Generate Passcodes</Link>
-                  </Button>
-                  <Button asChild variant="secondary" size="lg">
-                    <Link to="/manage-users">Manage User Accounts</Link>
-                  </Button>
-                  <Button asChild variant="outline" size="lg">
-                    <Link to="/all-records">Training Records</Link>
-                  </Button>
-                  <Button asChild variant="outline" size="lg">
-                    <Link to="/training-assignments">Training Assignments</Link>
-                  </Button>
-                  <Button asChild variant="secondary" size="lg">
-                    <Link to="/requests-complaints">Handle Complaints</Link>
-                  </Button>
-                  <Button asChild variant="outline" size="lg">
-                    <Link to="/forms/usee-uact">U-See U-Act Form</Link>
-                  </Button>
-                </div>
-                
-                <div className="bg-accent/10 p-4 rounded-lg border">
-                  <h3 className="font-semibold mb-2">Quick Stats</h3>
-                  <div className="grid grid-cols-3 gap-4 text-center">
-                    <div>
-                      <div className="text-2xl font-bold text-primary">24</div>
-                      <div className="text-sm text-muted-foreground">Active Passcodes</div>
-                    </div>
-                    <div>
-                      <div className="text-2xl font-bold text-secondary">156</div>
-                      <div className="text-sm text-muted-foreground">Total Users</div>
-                    </div>
-                    <div>
-                      <div className="text-2xl font-bold text-accent">8</div>
-                      <div className="text-sm text-muted-foreground">Pending Reviews</div>
-                    </div>
-                  </div>
-                </div>
+              <CardContent>
+                <p className="text-muted-foreground mb-4">Access your comprehensive training coordination dashboard with full management capabilities</p>
+                <Button onClick={() => navigate("/management/training-coordinator")} className="w-full">
+                  Open Training Coordinator Dashboard
+                </Button>
               </CardContent>
             </Card>
           </div>
@@ -356,44 +277,16 @@ const Dashboard = () => {
         );
       case "Nurse":
         return (
-          <div className="grid gap-6">
+          <div className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Nurse Dashboard</CardTitle>
+                <CardTitle>Nurse Dashboard Portal</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Button asChild variant="hero" size="lg">
-                    <Link to="/nurse-dashboard">Medical Records Review</Link>
-                  </Button>
-                  <Button asChild variant="secondary" size="lg">
-                    <Link to="/health-reports">Health Reports</Link>
-                  </Button>
-                  <Button asChild variant="outline" size="lg">
-                    <Link to="/requests-complaints">Send Requests</Link>
-                  </Button>
-                  <Button asChild variant="outline" size="lg">
-                    <Link to="/forms/usee-uact">U-See U-Act Form</Link>
-                  </Button>
-                </div>
-                
-                <div className="bg-accent/10 p-4 rounded-lg border">
-                  <h3 className="font-semibold mb-2">Medical Review Status</h3>
-                  <div className="grid grid-cols-3 gap-4 text-center">
-                    <div>
-                      <div className="text-2xl font-bold text-yellow-600">5</div>
-                      <div className="text-sm text-muted-foreground">Pending Review</div>
-                    </div>
-                    <div>
-                      <div className="text-2xl font-bold text-green-600">18</div>
-                      <div className="text-sm text-muted-foreground">Approved</div>
-                    </div>
-                    <div>
-                      <div className="text-2xl font-bold text-red-600">2</div>
-                      <div className="text-sm text-muted-foreground">Flagged</div>
-                    </div>
-                  </div>
-                </div>
+              <CardContent>
+                <p className="text-muted-foreground mb-4">Access your dedicated nurse dashboard for medical record reviews and health assessments</p>
+                <Button onClick={() => navigate("/management/nurse-dashboard")} className="w-full">
+                  Open Nurse Dashboard
+                </Button>
               </CardContent>
             </Card>
           </div>
@@ -401,29 +294,16 @@ const Dashboard = () => {
 
       case "Safety Coordinator":
         return (
-          <div className="grid gap-6">
+          <div className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Safety Coordinator Dashboard</CardTitle>
+                <CardTitle>Safety Coordinator Portal</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <Button asChild variant="hero">
-                    <Link to="/safety-reports">Safety Reports</Link>
-                  </Button>
-                  <Button asChild variant="secondary">
-                    <Link to="/usee-uact-data">U-See U-Act Data</Link>
-                  </Button>
-                  <Button asChild variant="outline">
-                    <Link to="/create-safety-forms">Create Safety Forms</Link>
-                  </Button>
-                  <Button asChild variant="outline">
-                    <Link to="/safety-complaints">Safety Complaints</Link>
-                  </Button>
-                  <Button asChild variant="secondary">
-                    <Link to="/forms/usee-uact">U-See U-Act Form</Link>
-                  </Button>
-                </div>
+              <CardContent>
+                <p className="text-muted-foreground mb-4">Access your comprehensive safety coordination dashboard with incident management and compliance tracking</p>
+                <Button onClick={() => navigate("/management/safety-coordinator")} className="w-full">
+                  Open Safety Coordinator Dashboard
+                </Button>
               </CardContent>
             </Card>
           </div>

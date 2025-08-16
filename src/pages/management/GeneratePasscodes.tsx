@@ -175,7 +175,7 @@ const GeneratePasscodes = () => {
                 onClick={createPasscode} 
                 disabled={loading || !traineeEmail}
                 className="w-full"
-                variant="hero"
+                variant="default"
               >
                 {loading ? "Generating..." : "Generate Passcode"}
               </Button>
