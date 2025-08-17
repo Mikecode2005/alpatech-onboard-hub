@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Shield, AlertTriangle, FileText, TrendingUp, Search, Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useAppState } from "@/state/appState";
 
 interface SafetyStats {
   activeIncidents: number;
@@ -45,7 +46,8 @@ const SafetyCoordinatorDashboard = () => {
     severity: "medium" as const
   });
   const [showIncidentForm, setShowIncidentForm] = useState(false);
-  const [loading, setLoading] = useState(true);
+const [loading, setLoading] = useState(true);
+  const useeSubmissions = useAppState((s) => s.useeUactSubmissions);
 
   useEffect(() => {
     fetchSafetyData();
@@ -351,6 +353,31 @@ const SafetyCoordinatorDashboard = () => {
                     <div className="flex flex-col gap-2 items-end">
                       {getSeverityBadge(incident.severity)}
                       {getStatusBadge(incident.status)}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* U-SEE U-ACT Submissions */}
+        <Card>
+          <CardHeader>
+            <CardTitle>U-SEE U-ACT Submissions</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {useeSubmissions.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">No submissions yet</div>
+            ) : (
+              <div className="space-y-4">
+                {useeSubmissions.map((item, idx) => (
+                  <div key={idx} className="p-4 border rounded-lg">
+                    <div className="grid md:grid-cols-2 gap-2">
+                      <div><span className="font-medium">Safe Acts:</span> <span className="text-sm text-muted-foreground">{item.safeActs || '-'}</span></div>
+                      <div><span className="font-medium">Unsafe Acts:</span> <span className="text-sm text-muted-foreground">{item.unsafeActs || '-'}</span></div>
+                      <div><span className="font-medium">Safe Conditions:</span> <span className="text-sm text-muted-foreground">{item.safeConditions || '-'}</span></div>
+                      <div><span className="font-medium">Unsafe Conditions:</span> <span className="text-sm text-muted-foreground">{item.unsafeConditions || '-'}</span></div>
                     </div>
                   </div>
                 ))}

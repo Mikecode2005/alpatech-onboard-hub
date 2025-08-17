@@ -8,6 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useAppState } from "@/state/appState";
+import TraineeQuickPick from "./components/TraineeQuickPick";
 
 const AssignTraining = () => {
   const navigate = useNavigate();
@@ -95,6 +96,8 @@ const AssignTraining = () => {
                   value={traineeEmail}
                   onChange={(e) => setTraineeEmail(e.target.value)}
                 />
+                {/* Quick pick from generated passcodes */}
+                <TraineeQuickPick onSelect={(email) => setTraineeEmail(email)} />
               </div>
 
               <div className="space-y-4">

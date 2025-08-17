@@ -14,8 +14,8 @@ const Onboarding = () => {
   const steps = [
     { title: "Welcome", description: "Welcome to Alpatech Training Portal", route: null },
     { title: "No Gift Policy", description: "Acknowledge AENL No Gift Policy", route: "/forms/welcome-policy" },
-    { title: "Course Registration", description: "Complete course registration form", route: "/forms/course-registration" },
     { title: "Medical Screening", description: "Complete medical screening forms", route: "/forms/medical-screening" },
+    { title: "Course Registration", description: "Complete course registration form", route: "/forms/course-registration" },
     { title: "Completion", description: "Onboarding complete", route: null }
   ];
 
@@ -73,15 +73,15 @@ const Onboarding = () => {
               
               {step === 3 && (
                 <div className="space-y-4">
-                  <p>Complete your course registration with personal and company details.</p>
-                  <p className="text-sm text-muted-foreground">This information helps us prepare appropriate training materials.</p>
+                  <p>Complete the medical screening form for safety assessment.</p>
+                  <p className="text-sm text-muted-foreground">This will be reviewed by our medical team before training approval.</p>
                 </div>
               )}
               
               {step === 4 && (
                 <div className="space-y-4">
-                  <p>Complete the medical screening form for safety assessment.</p>
-                  <p className="text-sm text-muted-foreground">This will be reviewed by our medical team before training approval.</p>
+                  <p>Complete your course registration with personal and company details.</p>
+                  <p className="text-sm text-muted-foreground">This information helps us prepare appropriate training materials.</p>
                 </div>
               )}
               

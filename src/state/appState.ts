@@ -158,6 +158,16 @@ export interface RequestComplaint {
   resolvedAt?: string;
 }
 
+export interface PasscodeEntry {
+  id: string;
+  code: string;
+  traineeEmail: string;
+  isUsed: boolean;
+  createdAt: string;
+  expiresAt: string;
+  usedAt?: string;
+}
+
 export interface AppState {
   user?: User;
   assignedTrainings: string[]; // BOSIET, FIRE WATCH, CSE&R
@@ -170,6 +180,7 @@ export interface AppState {
   useeUactSubmissions: USeeUActForm[];
   sizeSubmissions: SizeForm[];
   requestsComplaints: RequestComplaint[];
+  passcodes: PasscodeEntry[];
   
   // Actions
   setUser: (user?: User) => void;
@@ -186,6 +197,7 @@ export interface AppState {
   updateRequestComplaintStatus: (id: string, status: RequestComplaint['status']) => void;
   assignTrainingModules: (traineeEmail: string, modules: string[]) => void;
   getTraineeAssignments: (traineeEmail: string) => string[];
+  addPasscode: (traineeEmail: string, code: string, expiresAt: string) => void;
   reset: () => void;
 }
 
@@ -212,7 +224,7 @@ export const useAppState = create<AppState>((set, get) => ({
   useeUactSubmissions: load().useeUactSubmissions || [],
   sizeSubmissions: load().sizeSubmissions || [],
   requestsComplaints: load().requestsComplaints || [],
-  
+  passcodes: (load() as any).passcodes || [],
   setUser: (user) => {
     const next = { ...get(), user } as Partial<AppState>;
     persist(next);
@@ -309,6 +321,20 @@ export const useAppState = create<AppState>((set, get) => ({
     return get().assignedTrainings || [];
   },
   
+  addPasscode: (traineeEmail, code, expiresAt) => {
+    const entry: PasscodeEntry = {
+      id: Date.now().toString(),
+      code,
+      traineeEmail,
+      isUsed: false,
+      createdAt: new Date().toISOString(),
+      expiresAt,
+    };
+    const list = [...(get().passcodes || []), entry];
+    const next = { ...get(), passcodes: list } as Partial<AppState>;
+    persist(next);
+    set({ passcodes: list });
+  },
   reset: () => {
     persist({});
     set({

@@ -5,48 +5,20 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { useAppState } from "@/state/appState";
 import { Copy, RefreshCw, Key, Clock, User } from "lucide-react";
 
-interface Passcode {
-  id: string;
-  code: string;
-  role: string;
-  is_used: boolean;
-  used_by?: string;
-  trainee_email?: string;
-  created_at: string;
-  expires_at: string;
-  used_at?: string;
-}
 
 const GeneratePasscodes = () => {
   const { toast } = useToast();
-  const [passcodes, setPasscodes] = useState<Passcode[]>([]);
+  const passcodes = useAppState((s) => s.passcodes);
+  const addPasscode = useAppState((s) => s.addPasscode);
   const [traineeEmail, setTraineeEmail] = useState("");
   const [expiryDays, setExpiryDays] = useState(30);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    fetchPasscodes();
-  }, []);
-
-  const fetchPasscodes = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('passcodes')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      setPasscodes(data || []);
-    } catch (error) {
-      console.error('Error fetching passcodes:', error);
-      toast({ title: "Error fetching passcodes", variant: "destructive" });
-    }
-  };
 
   const generatePasscode = () => {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -63,7 +35,9 @@ const GeneratePasscodes = () => {
       return;
     }
 
-    if (passcodes.some(p => p.used_by === traineeEmail && !p.is_used)) {
+    const now = new Date();
+    const hasActive = passcodes.some(p => p.traineeEmail.toLowerCase() === traineeEmail.toLowerCase() && !p.isUsed && new Date(p.expiresAt) > now);
+    if (hasActive) {
       toast({ title: "Active passcode already exists for this email", variant: "destructive" });
       return;
     }
@@ -72,20 +46,9 @@ const GeneratePasscodes = () => {
     try {
       const expiresAt = new Date();
       expiresAt.setDate(expiresAt.getDate() + expiryDays);
+      const code = generatePasscode();
 
-      const newPasscode = {
-        code: generatePasscode(),
-        role: "Trainee",
-        trainee_email: traineeEmail,
-        expires_at: expiresAt.toISOString(),
-        created_by: "00000000-0000-0000-0000-000000000000" // Placeholder UUID, will be replaced with actual auth in real system
-      };
-
-      const { error } = await supabase
-        .from('passcodes')
-        .insert([newPasscode]);
-
-      if (error) throw error;
+      addPasscode(traineeEmail, code, expiresAt.toISOString());
 
       toast({ 
         title: "Passcode generated successfully!",
@@ -93,7 +56,6 @@ const GeneratePasscodes = () => {
       });
       
       setTraineeEmail("");
-      fetchPasscodes();
     } catch (error) {
       console.error('Error creating passcode:', error);
       toast({ title: "Error generating passcode", variant: "destructive" });
@@ -107,11 +69,11 @@ const GeneratePasscodes = () => {
     toast({ title: "Copied to clipboard!" });
   };
 
-  const getStatusBadge = (passcode: Passcode) => {
+  const getStatusBadge = (passcode: { isUsed: boolean; expiresAt: string }) => {
     const now = new Date();
-    const expiryDate = new Date(passcode.expires_at);
+    const expiryDate = new Date(passcode.expiresAt);
     
-    if (passcode.is_used) {
+    if (passcode.isUsed) {
       return <Badge variant="outline" className="bg-gray-50 text-gray-700">Used</Badge>;
     } else if (expiryDate < now) {
       return <Badge variant="outline" className="bg-red-50 text-red-700">Expired</Badge>;
@@ -120,9 +82,9 @@ const GeneratePasscodes = () => {
     }
   };
 
-  const activePasscodes = passcodes.filter(p => !p.is_used && new Date(p.expires_at) > new Date());
-  const usedPasscodes = passcodes.filter(p => p.is_used);
-  const expiredPasscodes = passcodes.filter(p => !p.is_used && new Date(p.expires_at) <= new Date());
+  const activePasscodes = passcodes.filter(p => !p.isUsed && new Date(p.expiresAt) > new Date());
+  const usedPasscodes = passcodes.filter(p => p.isUsed);
+  const expiredPasscodes = passcodes.filter(p => !p.isUsed && new Date(p.expiresAt) <= new Date());
 
   return (
     <div className="min-h-screen bg-background p-6">
@@ -134,7 +96,7 @@ const GeneratePasscodes = () => {
       <div className="max-w-6xl mx-auto space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold text-foreground">Passcode Management</h1>
-          <Button onClick={fetchPasscodes} variant="outline" size="sm">
+            <Button onClick={() => {}} variant="outline" size="sm">
             <RefreshCw className="h-4 w-4 mr-2" />
             Refresh
           </Button>
@@ -223,7 +185,7 @@ const GeneratePasscodes = () => {
                   <div key={passcode.id} className="flex items-center justify-between p-2 border rounded">
                     <div className="text-sm">
                       <div className="font-mono">{passcode.code}</div>
-                      <div className="text-muted-foreground">{passcode.role}</div>
+                      <div className="text-muted-foreground">Trainee</div>
                     </div>
                     {getStatusBadge(passcode)}
                   </div>
@@ -256,16 +218,16 @@ const GeneratePasscodes = () => {
                   {passcodes.map((passcode) => (
                     <tr key={passcode.id} className="border-b hover:bg-accent/50">
                       <td className="p-3 font-mono">{passcode.code}</td>
-                      <td className="p-3">{passcode.role}</td>
+                      <td className="p-3">Trainee</td>
                       <td className="p-3">{getStatusBadge(passcode)}</td>
                       <td className="p-3 text-sm text-muted-foreground">
-                        {new Date(passcode.created_at).toLocaleDateString()}
+                        {new Date(passcode.createdAt).toLocaleDateString()}
                       </td>
                       <td className="p-3 text-sm text-muted-foreground">
-                        {new Date(passcode.expires_at).toLocaleDateString()}
+                        {new Date(passcode.expiresAt).toLocaleDateString()}
                       </td>
                        <td className="p-3 text-sm">
-                         {passcode.trainee_email || "-"}
+                         {passcode.traineeEmail || "-"}
                        </td>
                       <td className="p-3">
                         <Button
