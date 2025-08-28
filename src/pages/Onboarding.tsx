@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
@@ -9,15 +9,57 @@ import { useAppState } from "@/state/appState";
 const Onboarding = () => {
   const navigate = useNavigate();
   const user = useAppState((s) => s.user);
+  const assignedTrainings = useAppState((s) => s.assignedTrainings);
   const [step, setStep] = useState(1);
 
-  const steps = [
+  // Base steps that everyone needs to complete
+  const baseSteps = [
     { title: "Welcome", description: "Welcome to Alpatech Training Portal", route: null },
     { title: "No Gift Policy", description: "Acknowledge AENL No Gift Policy", route: "/forms/welcome-policy" },
-    { title: "Medical Screening", description: "Complete medical screening forms", route: "/forms/medical-screening" },
     { title: "Course Registration", description: "Complete course registration form", route: "/forms/course-registration" },
+    { title: "Medical Screening", description: "Complete medical screening forms", route: "/forms/medical-screening" },
+  ];
+
+  // Dynamic steps based on assigned trainings
+  const dynamicSteps = [];
+  if (assignedTrainings.includes("BOSIET")) {
+    dynamicSteps.push({ 
+      title: "BOSIET Form", 
+      description: "Complete BOSIET training form", 
+      route: "/forms/bosiet" 
+    });
+  }
+  
+  if (assignedTrainings.includes("FIRE WATCH")) {
+    dynamicSteps.push({ 
+      title: "Fire Watch Form", 
+      description: "Complete Fire Watch training form", 
+      route: "/forms/fire-watch" 
+    });
+  }
+  
+  if (assignedTrainings.includes("CSE&R")) {
+    dynamicSteps.push({ 
+      title: "CSE&R Form", 
+      description: "Complete CSE&R training form", 
+      route: "/forms/cser" 
+    });
+  }
+
+  // Final completion step
+  const completionStep = [
     { title: "Completion", description: "Onboarding complete", route: null }
   ];
+
+  // Combine all steps
+  const steps = [...baseSteps, ...dynamicSteps, ...completionStep];
+
+  useEffect(() => {
+    // Redirect to login if no user
+    if (!user) {
+      navigate("/trainee-login");
+    }
+  }, [user, navigate]);
 
   const handleNext = () => {
     const currentStep = steps[step - 1];
@@ -60,7 +102,15 @@ const Onboarding = () => {
               {step === 1 && (
                 <div className="space-y-4">
                   <p>Welcome to the Alpatech Training Portal. We'll guide you through the onboarding process.</p>
-                  <p>This will include medical forms, safety training, and other essential documentation.</p>
+                  <p>This will include the following steps:</p>
+                  <ul className="list-disc list-inside text-left">
+                    <li>AENL No Gift Policy acknowledgment</li>
+                    <li>Course Registration</li>
+                    <li>Medical Screening</li>
+                    {assignedTrainings.length > 0 && (
+                      <li>Training specific forms as assigned by your supervisor</li>
+                    )}
+                  </ul>
                 </div>
               )}
               
@@ -73,19 +123,26 @@ const Onboarding = () => {
               
               {step === 3 && (
                 <div className="space-y-4">
-                  <p>Complete the medical screening form for safety assessment.</p>
-                  <p className="text-sm text-muted-foreground">This will be reviewed by our medical team before training approval.</p>
-                </div>
-              )}
-              
-              {step === 4 && (
-                <div className="space-y-4">
                   <p>Complete your course registration with personal and company details.</p>
                   <p className="text-sm text-muted-foreground">This information helps us prepare appropriate training materials.</p>
                 </div>
               )}
               
-              {step === 5 && (
+              {step === 4 && (
+                <div className="space-y-4">
+                  <p>Complete the medical screening form for safety assessment.</p>
+                  <p className="text-sm text-muted-foreground">This will be reviewed by our medical team before training approval.</p>
+                </div>
+              )}
+              
+              {step > 4 && step < steps.length && (
+                <div className="space-y-4">
+                  <p>Please complete the {steps[step - 1]?.title} as assigned by your training supervisor.</p>
+                  <p className="text-sm text-muted-foreground">This form is required for your specific training program.</p>
+                </div>
+              )}
+              
+              {step === steps.length && (
                 <div className="space-y-4">
                   <p>Congratulations! You have completed the onboarding process.</p>
                   <p>You can now access your dashboard and training materials.</p>

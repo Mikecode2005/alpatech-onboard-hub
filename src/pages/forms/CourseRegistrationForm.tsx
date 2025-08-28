@@ -7,11 +7,14 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { useAppState } from "@/state/appState";
 import { useNavigate } from "react-router-dom";
+import * as SupabaseServices from "@/integrations/supabase/services";
 
 const CourseRegistrationForm = () => {
   const navigate = useNavigate();
   const { saveCourseRegistration } = useAppState();
   const { toast } = useToast();
+  const user = useAppState((s) => s.user);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [form, setForm] = useState({
     courseName: "",
@@ -30,15 +33,43 @@ const CourseRegistrationForm = () => {
     email: "",
   });
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (!form.courseName || !form.firstName || !form.surname || !form.courseStartDate || !form.courseEndDate) {
       toast({ title: "Please fill in all required fields" });
       return;
     }
 
-    saveCourseRegistration(form);
-    toast({ title: "Course Registration Form Submitted Successfully!" });
-    navigate("/forms/medical-screening");
+    if (!user?.email) {
+      toast({ 
+        title: "Authentication error", 
+        description: "Please log in again to submit this form.",
+        variant: "destructive"
+      });
+      navigate("/trainee-login");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      // Save to local state
+      saveCourseRegistration(form);
+      
+      // Save to Supabase
+      await SupabaseServices.saveCourseRegistrationToSupabase(user.email, form);
+      
+      toast({ title: "Course Registration Form Submitted Successfully!" });
+      navigate("/forms/medical-screening");
+    } catch (error) {
+      console.error("Error saving course registration form:", error);
+      toast({ 
+        title: "Submission error", 
+        description: "There was an error submitting your form. Your data has been saved locally.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -72,6 +103,7 @@ const CourseRegistrationForm = () => {
                     onChange={(e) => setForm({ ...form, courseName: e.target.value.toUpperCase() })}
                     placeholder="ENTER COURSE NAME"
                     style={{ textTransform: 'uppercase' }}
+                    disabled={isSubmitting}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -80,6 +112,7 @@ const CourseRegistrationForm = () => {
                     type="date"
                     value={form.courseStartDate} 
                     onChange={(e) => setForm({ ...form, courseStartDate: e.target.value })}
+                    disabled={isSubmitting}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -88,6 +121,7 @@ const CourseRegistrationForm = () => {
                     type="date"
                     value={form.courseEndDate} 
                     onChange={(e) => setForm({ ...form, courseEndDate: e.target.value })}
+                    disabled={isSubmitting}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -96,6 +130,7 @@ const CourseRegistrationForm = () => {
                     type="time"
                     value={form.courseStartTime} 
                     onChange={(e) => setForm({ ...form, courseStartTime: e.target.value })}
+                    disabled={isSubmitting}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -104,6 +139,7 @@ const CourseRegistrationForm = () => {
                     type="time"
                     value={form.courseEndTime} 
                     onChange={(e) => setForm({ ...form, courseEndTime: e.target.value })}
+                    disabled={isSubmitting}
                   />
                 </div>
               </div>
@@ -119,6 +155,7 @@ const CourseRegistrationForm = () => {
                     onChange={(e) => setForm({ ...form, firstName: e.target.value.toUpperCase() })}
                     placeholder="FIRST NAME"
                     style={{ textTransform: 'uppercase' }}
+                    disabled={isSubmitting}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -128,6 +165,7 @@ const CourseRegistrationForm = () => {
                     onChange={(e) => setForm({ ...form, middleName: e.target.value.toUpperCase() })}
                     placeholder="MIDDLE NAME"
                     style={{ textTransform: 'uppercase' }}
+                    disabled={isSubmitting}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -137,6 +175,7 @@ const CourseRegistrationForm = () => {
                     onChange={(e) => setForm({ ...form, surname: e.target.value.toUpperCase() })}
                     placeholder="SURNAME"
                     style={{ textTransform: 'uppercase' }}
+                    disabled={isSubmitting}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -145,6 +184,7 @@ const CourseRegistrationForm = () => {
                     type="date"
                     value={form.dateOfBirth} 
                     onChange={(e) => setForm({ ...form, dateOfBirth: e.target.value })}
+                    disabled={isSubmitting}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -154,6 +194,7 @@ const CourseRegistrationForm = () => {
                     onChange={(e) => setForm({ ...form, companyName: e.target.value.toUpperCase() })}
                     placeholder="COMPANY NAME"
                     style={{ textTransform: 'uppercase' }}
+                    disabled={isSubmitting}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -163,6 +204,7 @@ const CourseRegistrationForm = () => {
                     onChange={(e) => setForm({ ...form, jobTitle: e.target.value.toUpperCase() })}
                     placeholder="JOB TITLE"
                     style={{ textTransform: 'uppercase' }}
+                    disabled={isSubmitting}
                   />
                 </div>
               </div>
@@ -178,6 +220,7 @@ const CourseRegistrationForm = () => {
                     onChange={(e) => setForm({ ...form, address: e.target.value.toUpperCase() })}
                     placeholder="FULL ADDRESS"
                     style={{ textTransform: 'uppercase' }}
+                    disabled={isSubmitting}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -187,6 +230,7 @@ const CourseRegistrationForm = () => {
                     value={form.phone} 
                     onChange={(e) => setForm({ ...form, phone: e.target.value })}
                     placeholder="+234 XXX XXX XXXX"
+                    disabled={isSubmitting}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -196,6 +240,7 @@ const CourseRegistrationForm = () => {
                     value={form.email} 
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
                     placeholder="email@example.com"
+                    disabled={isSubmitting}
                   />
                 </div>
               </div>
@@ -212,8 +257,9 @@ const CourseRegistrationForm = () => {
               variant="hero" 
               onClick={onSubmit}
               className="w-full max-w-md text-lg py-6"
+              disabled={isSubmitting}
             >
-              Submit Course Registration
+              {isSubmitting ? "Submitting..." : "Submit Course Registration"}
             </Button>
           </CardFooter>
         </Card>

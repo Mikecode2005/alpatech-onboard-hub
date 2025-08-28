@@ -7,11 +7,14 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { useAppState } from "@/state/appState";
 import { useNavigate } from "react-router-dom";
+import * as SupabaseServices from "@/integrations/supabase/services";
 
 const WelcomePolicyForm = () => {
   const navigate = useNavigate();
   const { saveWelcomePolicy } = useAppState();
   const { toast } = useToast();
+  const user = useAppState((s) => s.user);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [form, setForm] = useState({
     fullName: "",
@@ -30,15 +33,43 @@ const WelcomePolicyForm = () => {
     reader.readAsDataURL(f);
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (!form.fullName || !form.date || !form.signatureDataUrl) {
       toast({ title: "All fields are required" });
       return;
     }
 
-    saveWelcomePolicy(form);
-    toast({ title: "Welcome Policy Form Submitted Successfully!" });
-    navigate("/dashboard");
+    if (!user?.email) {
+      toast({ 
+        title: "Authentication error", 
+        description: "Please log in again to submit this form.",
+        variant: "destructive"
+      });
+      navigate("/trainee-login");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      // Save to local state
+      saveWelcomePolicy(form);
+      
+      // Save to Supabase
+      await SupabaseServices.saveWelcomePolicyToSupabase(user.email, form);
+      
+      toast({ title: "Welcome Policy Form Submitted Successfully!" });
+      navigate("/onboarding");
+    } catch (error) {
+      console.error("Error saving welcome policy form:", error);
+      toast({ 
+        title: "Submission error", 
+        description: "There was an error submitting your form. Your data has been saved locally.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -105,6 +136,7 @@ const WelcomePolicyForm = () => {
                   onChange={(e) => setForm(prev => ({ ...prev, fullName: e.target.value }))}
                   placeholder="Enter your complete full name"
                   className="text-lg"
+                  disabled={isSubmitting}
                 />
               </div>
               
@@ -115,6 +147,7 @@ const WelcomePolicyForm = () => {
                   value={form.date} 
                   onChange={(e) => setForm(prev => ({ ...prev, date: e.target.value }))}
                   className="text-lg"
+                  disabled={isSubmitting}
                 />
               </div>
               
@@ -125,6 +158,7 @@ const WelcomePolicyForm = () => {
                   accept="image/*" 
                   onChange={(e) => handleSignature(e.target.files?.[0] || null)}
                   className="text-base"
+                  disabled={isSubmitting}
                 />
                 <p className="text-sm text-muted-foreground">
                   Please upload a clear image of your signature. Accepted formats: JPG, PNG, GIF. Maximum size: 200KB.
@@ -148,8 +182,9 @@ const WelcomePolicyForm = () => {
               variant="hero" 
               onClick={onSubmit}
               className="w-full max-w-md text-lg py-6"
+              disabled={isSubmitting}
             >
-              I Acknowledge and Accept the NO GIFT POLICY
+              {isSubmitting ? "Submitting..." : "I Acknowledge and Accept the NO GIFT POLICY"}
             </Button>
           </CardFooter>
         </Card>

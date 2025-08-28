@@ -12,22 +12,73 @@ const TraineeLogin = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const setUser = useAppState((s) => s.setUser);
+  const passcodes = useAppState((s) => s.passcodes);
 
   const [email, setEmail] = useState("");
   const [passcode, setPasscode] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const onLogin = () => {
+    setIsLoading(true);
+    
     if (!email) {
       toast({ title: "Email required" });
+      setIsLoading(false);
       return;
     }
 
-    if (!/^\d{4}$/.test(passcode)) {
-      toast({ title: "Enter the 4-digit passcode" });
+    if (!passcode) {
+      toast({ title: "Passcode required" });
+      setIsLoading(false);
       return;
     }
 
+    // Find matching passcode entry
+    const passcodeEntry = passcodes.find(
+      (p) => p.traineeEmail.toLowerCase() === email.toLowerCase() && p.code === passcode
+    );
+
+    if (!passcodeEntry) {
+      toast({ 
+        title: "Invalid passcode", 
+        description: "The passcode you entered is not valid for this email address."
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    if (passcodeEntry.isUsed) {
+      toast({ 
+        title: "Passcode already used", 
+        description: "This passcode has already been used. Please contact your training coordinator."
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    // Check if passcode is expired
+    const now = new Date();
+    const expiryDate = new Date(passcodeEntry.expiresAt);
+    if (now > expiryDate) {
+      toast({ 
+        title: "Passcode expired", 
+        description: "This passcode has expired. Please contact your training coordinator for a new one."
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    // Mark passcode as used
+    const updatePasscodeUsage = useAppState.getState().passcodes.map(p => 
+      p.id === passcodeEntry.id 
+        ? { ...p, isUsed: true, usedAt: new Date().toISOString() } 
+        : p
+    );
+    useAppState.setState({ passcodes: updatePasscodeUsage });
+
+    // Set user and navigate to onboarding
     setUser({ email, role: "Trainee", passcode });
+    setIsLoading(false);
     navigate("/onboarding");
   };
 
@@ -53,18 +104,19 @@ const TraineeLogin = () => {
                 placeholder="your.email@company.com" 
                 value={email} 
                 onChange={(e) => setEmail(e.target.value)} 
+                disabled={isLoading}
               />
             </div>
 
             <div className="grid gap-2">
-              <Label>4-Digit Passcode</Label>
+              <Label>Passcode</Label>
               <Input 
-                inputMode="numeric" 
-                maxLength={4} 
-                placeholder="1234" 
+                type="text"
+                placeholder="Enter your passcode" 
                 value={passcode} 
                 onChange={(e) => setPasscode(e.target.value)} 
                 className="text-center text-lg tracking-widest"
+                disabled={isLoading}
               />
               <p className="text-sm text-muted-foreground">
                 Passcode provided by Training Coordinator via SMS/Email
@@ -76,13 +128,15 @@ const TraineeLogin = () => {
               variant="hero" 
               className="w-full" 
               onClick={onLogin}
+              disabled={isLoading}
             >
-              Access Training Portal
+              {isLoading ? "Verifying..." : "Access Training Portal"}
             </Button>
             <Button 
               variant="outline" 
               className="w-full" 
               onClick={() => navigate("/staff-login")}
+              disabled={isLoading}
             >
               Staff Login
             </Button>

@@ -1,4 +1,124 @@
-# Welcome to your Lovable project
+# Alpatech Onboard Hub
+
+A comprehensive onboarding and training management system for Alpatech Training Centre.
+
+## Project Overview
+
+The Alpatech Onboard Hub is a web application designed to streamline the onboarding process for trainees and provide training management tools for staff. The system includes:
+
+- Secure trainee login with passcode validation
+- Structured onboarding flow with dynamic form assignment
+- Training management for coordinators and supervisors
+- Supabase integration for data persistence
+- Comprehensive form management and validation
+
+## Key Features
+
+### Trainee Experience
+- Secure login with coordinator-generated passcodes
+- Step-by-step onboarding process
+- Form submission with validation
+- Dashboard for tracking progress and assigned trainings
+
+### Staff Experience
+- Passcode generation and management
+- Training assignment for trainees
+- Form review and approval
+- Comprehensive reporting and management tools
+
+## Technical Implementation
+
+### Frontend
+- React with TypeScript
+- Shadcn UI components
+- React Router for navigation
+- Zustand for state management
+
+### Backend
+- Supabase for database and authentication
+- SQL schema for structured data storage
+- RESTful API integration
+
+## Onboarding Flow
+
+The trainee onboarding process follows this sequence:
+
+1. **Trainee Login**: Secure access with coordinator-generated passcode
+2. **AENL No Gift Policy**: Acknowledgment of company policies
+3. **Course Registration**: Personal and course details
+4. **Medical Screening**: Health assessment for training suitability
+5. **Dynamic Training Forms**: Additional forms based on assigned training modules
+6. **Dashboard Access**: Upon completion, access to training materials and resources
+
+## Development Setup
+
+### Prerequisites
+- Node.js 16+
+- npm or yarn
+- Supabase account
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/Mikecode2005/alpatech-onboard-hub.git
+cd alpatech-onboard-hub
+```
+
+2. Install dependencies:
+```bash
+npm install
+# or
+yarn install
+```
+
+3. Set up environment variables:
+Create a `.env` file with the following variables:
+```
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+4. Start the development server:
+```bash
+npm run dev
+# or
+yarn dev
+```
+
+## Database Schema
+
+The application uses the following main tables in Supabase:
+
+- `users`: User accounts and roles
+- `passcodes`: Generated access codes for trainees
+- `welcome_policy_forms`: No Gift Policy acknowledgments
+- `course_registration_forms`: Course registration details
+- `medical_screening_forms`: Medical assessment information
+- `training_assignments`: Assigned training modules
+- `bosiet_forms`, `fire_watch_forms`, `cser_forms`: Training-specific forms
+- `requests_complaints`: User requests and complaints
+
+## Recent Updates
+
+- Implemented trainee login with passcode validation
+- Reordered onboarding flow to match requirements
+- Added Supabase integration for data persistence
+- Created passcode management interface for coordinators
+- Updated form pages to save data to Supabase
+- Added dynamic form assignment based on training supervisor selections
+
+## Future Enhancements
+
+- Email notifications for passcode generation
+- Mobile-responsive design improvements
+- Advanced reporting and analytics
+- Integration with external training systems
+- Offline support for remote training locations
+
+## Contributors
+
+- [Mike Code](https://github.com/Mikecode2005)
 
 ## Project info
 
@@ -36,38 +156,6 @@ npm i
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## License
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/994ccf8a-a705-4982-a602-5dd479e09842) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+This project is proprietary and confidential. Unauthorized copying, distribution, or use is strictly prohibited.

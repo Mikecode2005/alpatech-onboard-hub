@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import * as SupabaseServices from "@/integrations/supabase/services";
 
 export type Role =
   | "Trainee"
@@ -198,6 +199,7 @@ export interface AppState {
   assignTrainingModules: (traineeEmail: string, modules: string[]) => void;
   getTraineeAssignments: (traineeEmail: string) => string[];
   addPasscode: (traineeEmail: string, code: string, expiresAt: string) => void;
+  syncWithSupabase: () => Promise<void>;
   reset: () => void;
 }
 
@@ -225,10 +227,17 @@ export const useAppState = create<AppState>((set, get) => ({
   sizeSubmissions: load().sizeSubmissions || [],
   requestsComplaints: load().requestsComplaints || [],
   passcodes: (load() as any).passcodes || [],
+  
   setUser: (user) => {
     const next = { ...get(), user } as Partial<AppState>;
     persist(next);
     set({ user });
+    
+    // Save user to Supabase
+    if (user) {
+      SupabaseServices.saveUserToSupabase(user)
+        .catch(err => console.error("Failed to save user to Supabase:", err));
+    }
   },
   
   setAssignedTrainings: (mods) => {
@@ -241,36 +250,78 @@ export const useAppState = create<AppState>((set, get) => ({
     const next = { ...get(), welcomePolicy: d } as Partial<AppState>;
     persist(next);
     set({ welcomePolicy: d });
+    
+    // Save to Supabase
+    const user = get().user;
+    if (user) {
+      SupabaseServices.saveWelcomePolicyToSupabase(user.email, d)
+        .catch(err => console.error("Failed to save welcome policy to Supabase:", err));
+    }
   },
   
   saveCourseRegistration: (d) => {
     const next = { ...get(), courseRegistration: d } as Partial<AppState>;
     persist(next);
     set({ courseRegistration: d });
+    
+    // Save to Supabase
+    const user = get().user;
+    if (user) {
+      SupabaseServices.saveCourseRegistrationToSupabase(user.email, d)
+        .catch(err => console.error("Failed to save course registration to Supabase:", err));
+    }
   },
   
   saveMedicalScreening: (d) => {
     const next = { ...get(), medicalScreening: d } as Partial<AppState>;
     persist(next);
     set({ medicalScreening: d });
+    
+    // Save to Supabase
+    const user = get().user;
+    if (user) {
+      SupabaseServices.saveMedicalScreeningToSupabase(user.email, d)
+        .catch(err => console.error("Failed to save medical screening to Supabase:", err));
+    }
   },
   
   saveBOSIETForm: (d) => {
     const next = { ...get(), bosietForm: d } as Partial<AppState>;
     persist(next);
     set({ bosietForm: d });
+    
+    // Save to Supabase
+    const user = get().user;
+    if (user) {
+      SupabaseServices.saveBOSIETFormToSupabase(user.email, d)
+        .catch(err => console.error("Failed to save BOSIET form to Supabase:", err));
+    }
   },
   
   saveFireWatchForm: (d) => {
     const next = { ...get(), fireWatchForm: d } as Partial<AppState>;
     persist(next);
     set({ fireWatchForm: d });
+    
+    // Save to Supabase
+    const user = get().user;
+    if (user) {
+      SupabaseServices.saveFireWatchFormToSupabase(user.email, d)
+        .catch(err => console.error("Failed to save Fire Watch form to Supabase:", err));
+    }
   },
   
   saveCSERForm: (d) => {
     const next = { ...get(), cserForm: d } as Partial<AppState>;
     persist(next);
     set({ cserForm: d });
+    
+    // Save to Supabase
+    const user = get().user;
+    if (user) {
+      SupabaseServices.saveCSERFormToSupabase(user.email, d)
+        .catch(err => console.error("Failed to save CSE&R form to Supabase:", err));
+    }
   },
   
   submitUSeeUAct: (d) => {
@@ -278,6 +329,13 @@ export const useAppState = create<AppState>((set, get) => ({
     const next = { ...get(), useeUactSubmissions: list } as Partial<AppState>;
     persist(next);
     set({ useeUactSubmissions: list });
+    
+    // Save to Supabase
+    const user = get().user;
+    if (user) {
+      SupabaseServices.saveUSeeUActFormToSupabase(user.email, d)
+        .catch(err => console.error("Failed to save U-See U-Act form to Supabase:", err));
+    }
   },
   
   submitSizeForm: (d) => {
@@ -285,6 +343,13 @@ export const useAppState = create<AppState>((set, get) => ({
     const next = { ...get(), sizeSubmissions: list } as Partial<AppState>;
     persist(next);
     set({ sizeSubmissions: list });
+    
+    // Save to Supabase
+    const user = get().user;
+    if (user) {
+      SupabaseServices.saveSizeFormToSupabase(user.email, d)
+        .catch(err => console.error("Failed to save Size form to Supabase:", err));
+    }
   },
   
   submitRequestComplaint: (d) => {
@@ -297,6 +362,10 @@ export const useAppState = create<AppState>((set, get) => ({
     const next = { ...get(), requestsComplaints: list } as Partial<AppState>;
     persist(next);
     set({ requestsComplaints: list });
+    
+    // Save to Supabase
+    SupabaseServices.saveRequestComplaintToSupabase(newItem)
+      .catch(err => console.error("Failed to save request/complaint to Supabase:", err));
   },
   
   updateRequestComplaintStatus: (id, status) => {
@@ -308,6 +377,11 @@ export const useAppState = create<AppState>((set, get) => ({
     const next = { ...get(), requestsComplaints: list } as Partial<AppState>;
     persist(next);
     set({ requestsComplaints: list });
+    
+    // Update in Supabase
+    const resolvedAt = status === 'Resolved' ? new Date().toISOString() : undefined;
+    SupabaseServices.updateRequestComplaintStatusInSupabase(id, status, resolvedAt)
+      .catch(err => console.error("Failed to update request/complaint status in Supabase:", err));
   },
   
   assignTrainingModules: (traineeEmail, modules) => {
@@ -315,9 +389,15 @@ export const useAppState = create<AppState>((set, get) => ({
     const next = { ...get(), assignedTrainings: modules } as Partial<AppState>;
     persist(next);
     set({ assignedTrainings: modules });
+    
+    // Save to Supabase
+    SupabaseServices.saveTrainingAssignmentsToSupabase(traineeEmail, modules)
+      .catch(err => console.error("Failed to save training assignments to Supabase:", err));
   },
   
   getTraineeAssignments: (traineeEmail) => {
+    // In a real app, this would fetch assignments specific to the trainee
+    // For now, we'll return the global assignments
     return get().assignedTrainings || [];
   },
   
@@ -334,7 +414,33 @@ export const useAppState = create<AppState>((set, get) => ({
     const next = { ...get(), passcodes: list } as Partial<AppState>;
     persist(next);
     set({ passcodes: list });
+    
+    // Save to Supabase
+    SupabaseServices.savePasscodeToSupabase(entry)
+      .catch(err => console.error("Failed to save passcode to Supabase:", err));
   },
+  
+  syncWithSupabase: async () => {
+    try {
+      // Fetch passcodes from Supabase
+      const passcodes = await SupabaseServices.getPasscodesFromSupabase();
+      set({ passcodes });
+      
+      // If user is logged in, fetch their training assignments
+      const user = get().user;
+      if (user) {
+        const assignments = await SupabaseServices.getTrainingAssignmentsFromSupabase(user.email);
+        set({ assignedTrainings: assignments });
+      }
+      
+      // Update local storage
+      const next = { ...get(), passcodes } as Partial<AppState>;
+      persist(next);
+    } catch (error) {
+      console.error("Failed to sync with Supabase:", error);
+    }
+  },
+  
   reset: () => {
     persist({});
     set({
@@ -349,6 +455,7 @@ export const useAppState = create<AppState>((set, get) => ({
       useeUactSubmissions: [],
       sizeSubmissions: [],
       requestsComplaints: [],
+      passcodes: [],
     });
   },
 }));

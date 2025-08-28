@@ -9,11 +9,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { useAppState } from "@/state/appState";
 import { useNavigate } from "react-router-dom";
+import * as SupabaseServices from "@/integrations/supabase/services";
 
 const MedicalScreeningForm = () => {
   const navigate = useNavigate();
   const { saveMedicalScreening } = useAppState();
   const { toast } = useToast();
+  const user = useAppState((s) => s.user);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [form, setForm] = useState({
     name: "",
@@ -32,15 +35,52 @@ const MedicalScreeningForm = () => {
     companySponsors: "",
   });
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (!form.name || !form.nameOfCompany || !form.age) {
       toast({ title: "Please fill in all required fields" });
       return;
     }
 
-    saveMedicalScreening(form);
-    toast({ title: "Medical Screening Form Submitted Successfully!" });
-    navigate("/dashboard");
+    if (!user?.email) {
+      toast({ 
+        title: "Authentication error", 
+        description: "Please log in again to submit this form.",
+        variant: "destructive"
+      });
+      navigate("/trainee-login");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      // Save to local state
+      saveMedicalScreening(form);
+      
+      // Save to Supabase
+      await SupabaseServices.saveMedicalScreeningToSupabase(user.email, form);
+      
+      toast({ title: "Medical Screening Form Submitted Successfully!" });
+      
+      // Check if there are assigned trainings to navigate to
+      const assignedTrainings = useAppState.getState().assignedTrainings;
+      if (assignedTrainings && assignedTrainings.length > 0) {
+        // Navigate to the next step in onboarding
+        navigate("/onboarding");
+      } else {
+        // If no assigned trainings, go to dashboard
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      console.error("Error saving medical screening form:", error);
+      toast({ 
+        title: "Submission error", 
+        description: "There was an error submitting your form. Your data has been saved locally.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -67,6 +107,7 @@ const MedicalScreeningForm = () => {
                     value={form.name} 
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                     placeholder="Full Name"
+                    disabled={isSubmitting}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -75,11 +116,16 @@ const MedicalScreeningForm = () => {
                     value={form.nameOfCompany} 
                     onChange={(e) => setForm({ ...form, nameOfCompany: e.target.value })}
                     placeholder="Company Name"
+                    disabled={isSubmitting}
                   />
                 </div>
                 <div className="grid gap-2">
                   <Label>Gender</Label>
-                  <Select value={form.gender} onValueChange={(v) => setForm({ ...form, gender: v as "Male" | "Female" })}>
+                  <Select 
+                    value={form.gender} 
+                    onValueChange={(v) => setForm({ ...form, gender: v as "Male" | "Female" })}
+                    disabled={isSubmitting}
+                  >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -91,7 +137,11 @@ const MedicalScreeningForm = () => {
                 </div>
                 <div className="grid gap-2">
                   <Label>Age *</Label>
-                  <Select value={form.age} onValueChange={(v) => setForm({ ...form, age: v })}>
+                  <Select 
+                    value={form.age} 
+                    onValueChange={(v) => setForm({ ...form, age: v })}
+                    disabled={isSubmitting}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select age range" />
                     </SelectTrigger>
@@ -120,6 +170,7 @@ const MedicalScreeningForm = () => {
                     type="checkbox" 
                     checked={form.hasCondition} 
                     onChange={(e) => setForm({ ...form, hasCondition: e.target.checked })} 
+                    disabled={isSubmitting}
                   />
                   <Label htmlFor="hasCondition">Do you have any medical condition that may affect your training?</Label>
                 </div>
@@ -131,6 +182,7 @@ const MedicalScreeningForm = () => {
                     onChange={(e) => setForm({ ...form, medication: e.target.value })}
                     placeholder="List any medications you are currently taking"
                     rows={3}
+                    disabled={isSubmitting}
                   />
                 </div>
 
@@ -141,6 +193,7 @@ const MedicalScreeningForm = () => {
                     onChange={(e) => setForm({ ...form, healthConditionDetails: e.target.value })}
                     placeholder="Provide details of any health conditions"
                     rows={3}
+                    disabled={isSubmitting}
                   />
                 </div>
 
@@ -151,6 +204,7 @@ const MedicalScreeningForm = () => {
                     onChange={(e) => setForm({ ...form, fireProximityInfo: e.target.value })}
                     placeholder="Any concerns about working near fire or smoke?"
                     rows={3}
+                    disabled={isSubmitting}
                   />
                 </div>
 
@@ -160,6 +214,7 @@ const MedicalScreeningForm = () => {
                     value={form.weaponPossession} 
                     onChange={(e) => setForm({ ...form, weaponPossession: e.target.value })}
                     placeholder="Are you in possession of any weapon? If yes, specify"
+                    disabled={isSubmitting}
                   />
                 </div>
 
@@ -170,6 +225,7 @@ const MedicalScreeningForm = () => {
                     onChange={(e) => setForm({ ...form, remarks: e.target.value })}
                     placeholder="Any additional medical information or concerns"
                     rows={4}
+                    disabled={isSubmitting}
                   />
                 </div>
               </div>
@@ -190,6 +246,7 @@ const MedicalScreeningForm = () => {
                   <Input 
                     value={form.attestationName} 
                     onChange={(e) => setForm({ ...form, attestationName: e.target.value })} 
+                    disabled={isSubmitting}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -198,6 +255,7 @@ const MedicalScreeningForm = () => {
                     type="date" 
                     value={form.attestationDate} 
                     onChange={(e) => setForm({ ...form, attestationDate: e.target.value })} 
+                    disabled={isSubmitting}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -206,6 +264,7 @@ const MedicalScreeningForm = () => {
                     value={form.attestationSignature} 
                     onChange={(e) => setForm({ ...form, attestationSignature: e.target.value })}
                     placeholder="Digital signature"
+                    disabled={isSubmitting}
                   />
                 </div>
               </div>
@@ -216,6 +275,7 @@ const MedicalScreeningForm = () => {
                   value={form.companySponsors} 
                   onChange={(e) => setForm({ ...form, companySponsors: e.target.value })} 
                   placeholder="Name of sponsoring company"
+                  disabled={isSubmitting}
                 />
               </div>
             </section>
@@ -225,8 +285,9 @@ const MedicalScreeningForm = () => {
               variant="hero" 
               onClick={onSubmit}
               className="w-full max-w-md text-lg py-6"
+              disabled={isSubmitting}
             >
-              Submit Medical Screening Form
+              {isSubmitting ? "Submitting..." : "Submit Medical Screening Form"}
             </Button>
           </CardFooter>
         </Card>
