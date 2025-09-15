@@ -43,6 +43,10 @@ import DeskOfficerVerification from "./pages/management/DeskOfficerVerification"
 import YouSeeUActData from "./pages/YouSeeUActData";
 import Unauthorized from "./pages/Unauthorized";
 import ProtectedRoute from "./components/ProtectedRoute";
+import OperationsManagerDashboard from "./pages/management/OperationsManagerDashboard";
+import ChiefOperationsOfficerDashboard from "./pages/management/ChiefOperationsOfficerDashboard";
+import ToolboxTalkDashboard from "./pages/management/ToolboxTalkDashboard";
+import ToolboxTalkForm from "./pages/management/ToolboxTalkForm";
 
 const queryClient = new QueryClient();
 
@@ -324,6 +328,26 @@ const App = () => (
             <Route path="/user-activity" element={
               <ProtectedRoute requiredPermissions={["admin_access"]}>
                 <PlaceholderPage title="User Activity" description="Monitor user activity across the platform" />
+              </ProtectedRoute>
+            } />
+            <Route path="/operations-manager-dashboard" element={
+              <ProtectedRoute requiredPermissions={["view_dashboard"]}>
+                <OperationsManagerDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/executive-dashboard" element={
+              <ProtectedRoute requiredPermissions={["view_dashboard", "admin_access"]}>
+                <ChiefOperationsOfficerDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/toolbox-talk-dashboard" element={
+              <ProtectedRoute requiredPermissions={["view_dashboard"]}>
+                <ToolboxTalkDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/toolbox-talk-form/:formId" element={
+              <ProtectedRoute requiredPermissions={["view_dashboard"]}>
+                <ToolboxTalkForm />
               </ProtectedRoute>
             } />
             <Route path="/escalate-to-coo" element={
