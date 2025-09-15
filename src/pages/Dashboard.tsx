@@ -319,13 +319,13 @@ const Dashboard = () => {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   <Button asChild variant="hero">
-                    <Link to="/training-statistics">Training Statistics</Link>
+                    <Link to="/operations-manager-dashboard">Operations Dashboard</Link>
+                  </Button>
+                  <Button asChild variant="secondary">
+                    <Link to="/toolbox-talk-dashboard">Toolbox Talks</Link>
                   </Button>
                   <Button asChild variant="secondary">
                     <Link to="/medical-reports-overview">Medical Reports</Link>
-                  </Button>
-                  <Button asChild variant="secondary">
-                    <Link to="/user-activity">User Activity</Link>
                   </Button>
                   <Button asChild variant="outline">
                     <Link to="/escalate-to-coo">Escalate to COO</Link>
@@ -356,6 +356,9 @@ const Dashboard = () => {
                       </Button>
                       <Button asChild variant="secondary">
                         <Link to="/high-level-requests">High-Level Requests</Link>
+                      </Button>
+                      <Button asChild variant="secondary">
+                        <Link to="/toolbox-talk-dashboard">Toolbox Talks</Link>
                       </Button>
                       <Button asChild variant="secondary">
                         <Link to="/forms/usee-uact">U-See U-Act Form</Link>
