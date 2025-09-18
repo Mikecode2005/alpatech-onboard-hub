@@ -22,6 +22,8 @@ const buttonVariants = cva(
           "bg-gradient-to-r from-[hsl(var(--primary))] to-[hsl(var(--primary)/0.8)] text-primary-foreground shadow-sm hover:brightness-105",
         premium:
           "bg-[hsl(var(--card)/0.6)] backdrop-blur border border-[hsl(var(--border)/0.6)] text-foreground hover:bg-[hsl(var(--card)/0.7)]",
+        cta:
+          "bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300",
       },
       size: {
         default: "h-10 px-4 py-2",
