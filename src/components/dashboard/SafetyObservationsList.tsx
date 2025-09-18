@@ -59,7 +59,7 @@ const SafetyObservationsList = ({ limit, filter }: SafetyObservationsListProps) 
     setLoading(true);
     try {
       let query = supabase
-        .from('usee_uact_forms')
+        .from('you_see_u_act')
         .select('*')
         .order('submitted_at', { ascending: false });
       
@@ -74,26 +74,19 @@ const SafetyObservationsList = ({ limit, filter }: SafetyObservationsListProps) 
       // Transform data to match our interface
       const transformedData: SafetyObservation[] = (data || []).map(item => ({
         id: item.id,
-        userId: item.trainee_email,
-        userName: item.personnel_name || item.trainee_email,
-        observationType: item.safe_acts ? 'safe_act' : 
-                         item.unsafe_acts ? 'unsafe_act' : 
-                         item.safe_conditions ? 'safe_condition' : 'unsafe_condition',
-        category: 
-          item.safe_acts ? 'Safe Act' : 
-          item.unsafe_acts ? 'Unsafe Act' : 
-          item.safe_conditions ? 'Safe Condition' : 'Unsafe Condition',
-        location: 'Work Area',
-        description: 
-          item.safe_acts || 
-          item.unsafe_acts || 
-          item.safe_conditions || 
-          item.unsafe_conditions || '',
-        actionTaken: item.corrective_action || item.sustain_action,
-        submittedAt: item.submitted_at,
-        status: item.personnel_signature ? 'resolved' : 'submitted',
-        resolvedAt: item.personnel_date,
-        resolution: item.prevent_reoccur
+        userId: item.observer_email,
+        userName: item.observer_name || item.observer_email,
+        observationType: item.incident_type === 'safe_act' ? 'safe_act' : 
+                         item.incident_type === 'unsafe_act' ? 'unsafe_act' : 
+                         item.incident_type === 'safe_condition' ? 'safe_condition' : 'unsafe_condition',
+        category: item.incident_type || 'Safety Observation',
+        location: item.location || 'Work Area',
+        description: item.description || '',
+        actionTaken: item.immediate_action,
+        submittedAt: item.created_at,
+        status: 'submitted',
+        resolvedAt: undefined,
+        resolution: undefined
       }));
       
       setObservations(transformedData);
@@ -152,11 +145,9 @@ const SafetyObservationsList = ({ limit, filter }: SafetyObservationsListProps) 
     
     try {
       const { error } = await supabase
-        .from('usee_uact_forms')
+        .from('you_see_u_act')
         .update({
-          prevent_reoccur: resolution,
-          personnel_signature: 'Resolved',
-          personnel_date: new Date().toISOString()
+          description: resolution
         })
         .eq('id', selectedObservation.id);
       

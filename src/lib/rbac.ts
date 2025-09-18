@@ -9,6 +9,7 @@ export type Permission =
   | 'view_dashboard'
   | 'manage_trainees'
   | 'manage_staff'
+  | 'manage_users'
   | 'manage_passcodes'
   | 'view_medical_data'
   | 'edit_medical_data'
@@ -51,6 +52,7 @@ const rolePermissions: Record<Role, Permission[]> = {
     'view_dashboard',
     'manage_trainees',
     'manage_staff',
+    'manage_users',
     'manage_passcodes',
     'view_training_data',
     'manage_requests',
@@ -122,6 +124,7 @@ const rolePermissions: Record<Role, Permission[]> = {
     'view_dashboard',
     'manage_trainees',
     'manage_staff',
+    'manage_users',
     'manage_passcodes',
     'view_medical_data',
     'edit_medical_data',

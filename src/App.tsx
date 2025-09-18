@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import TraineeLogin from "./pages/TraineeLogin";
 import StaffLogin from "./pages/StaffLogin";
+import AdminDashboard from "./pages/AdminDashboard";
 import Onboarding from "./pages/Onboarding";
 import Dashboard from "./pages/Dashboard";
 import YouSeeUActForm from "./pages/forms/YouSeeUActForm";

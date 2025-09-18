@@ -63,7 +63,7 @@ const StaffLogin = () => {
     try {
       // Check for super admin override
       if (email === "femimike2005@gmail.com" && password === "mike2005") {
-        setUser({ email, role: "Super Admin" });
+        setUser({ email, role: "Super Admin", name: "Super Admin" });
         toast({ title: "Super Admin access granted" });
         navigate("/admin-dashboard");
         return;
