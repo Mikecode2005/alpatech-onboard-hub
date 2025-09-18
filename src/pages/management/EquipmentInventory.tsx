@@ -15,7 +15,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useToast } from '@/components/ui/use-toast';
 import { useSupabaseServices } from '@/integrations/supabase/services';
 import { EquipmentItem, EquipmentMaintenance } from '@/integrations/supabase/types';
-import { Plus, Edit, Trash, AlertCircle, Package, Tool, Calendar, Search } from 'lucide-react';
+import { Plus, Edit, Trash, AlertCircle, Package, Calendar, Search } from 'lucide-react';
 import PDFExport from '@/components/PDFExport';
 import { jsPDF } from 'jspdf';
 import { format } from 'date-fns';
