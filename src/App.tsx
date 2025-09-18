@@ -139,6 +139,11 @@ const App = () => (
             } />
 
             {/* Management Routes */}
+            <Route path="/admin-dashboard" element={
+              <ProtectedRoute requiredPermissions={["super_admin_access"]}>
+                <AdminDashboard />
+              </ProtectedRoute>
+            } />
             <Route path="/executive-dashboard" element={
               <ProtectedRoute requiredPermissions={["admin_access"]}>
                 <ExecutiveDashboard />
